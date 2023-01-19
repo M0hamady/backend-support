@@ -54,7 +54,7 @@ def users(request):
         if 'is_manager' in list_of_search:
             is_manager = request.data['is_manager']
 
-        user= User.objects.create(
+        user= User_inf.objects.create(
             name=name,
             ip=ip,
             info=info,
