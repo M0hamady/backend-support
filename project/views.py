@@ -26,7 +26,7 @@ from django.conf import settings
 def project(request):
     # print(request.sesion)
     if request.method == 'GET':
-        # print(request.headers)
+        print(request.headers)
         try:
             project = Project.objects.all().order_by('-created_at')
             serialize = ProjectSerializers(project, many= True)
@@ -35,19 +35,20 @@ def project(request):
 
         return Response(serialize.data)
     elif request.method == "POST":
-        # print(request.user,55,request)
+        print(request,55,request)
         list_of_search = [k for k, v in request.data.items()]
         if ('name' in list_of_search):
             name_ = request.data['name']
         if ('address' in list_of_search):
             address_ = request.data['address']
         if ('owner' in list_of_search):
-            owner = request.data['owner']
-
+            owner = Token.objects.get(key =str(request.data['owner']).split(' ')[0])
+            print(str(request.data['owner']).split(' '),545454)
+        print(list_of_search)
         project = Project.objects.create(
             name=name_,
             address=address_,
-            owner = User.objects.get(id=owner),
+            owner = User.objects.get(auth_token=owner),
             creator = request.user,
         )
         project.save()
