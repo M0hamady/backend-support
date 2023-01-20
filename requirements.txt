@@ -15,6 +15,5 @@ django-widget-tweaks==1.4.12
 djangorestframework==3.12.2
 djangorestframework-simplejwt==4.8.0
 djoser==2.1.0
-gunicorn==20.1.0
-sqlclient==2.1.0rc1
-
+gunicorn
+sqlclient
