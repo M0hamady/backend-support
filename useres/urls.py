@@ -10,6 +10,7 @@ urlpatterns = [
     path('is-admin/', is_admin),
     path('register/', RegisterView.as_view(), name='auth_register'),
     path('user/', user, name='auth'),
+    path('main-users/', main_users, name='auth'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns = format_suffix_patterns(urlpatterns)

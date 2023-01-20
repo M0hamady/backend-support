@@ -14,6 +14,15 @@ from django.shortcuts import get_object_or_404
 
 @api_view(['GET','POST'])
 @permission_classes((AllowAny,))
+def main_users(request):
+    if request.method == 'GET':
+        users = User.objects.all()
+        # print(1)
+        serializer = User_Serualizer(users, many=True)
+        # print(serializer.data)
+        return Response(serializer.data)
+@api_view(['GET','POST'])
+@permission_classes((AllowAny,))
 def users(request):
     if request.method == 'GET':
         users =User_inf.objects.all()
