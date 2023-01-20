@@ -27,7 +27,7 @@ from django.conf import settings
 def project(request):
     # print(request.sesion)
     if request.method == 'GET':
-        print(request.headers)
+        # print(request.headers)
         try:
             project = Project.objects.all().order_by('-created_at')
             serialize = ProjectSerializers(project, many= True)

@@ -19,7 +19,7 @@ class Meeting(models.Model):
     last_ip =models.CharField(max_length=150,null=True)
     meet_at = models.DateField(auto_now=False,null=True)
     meet_time = models.TimeField(auto_now=False,null=True)
-    orders = models.ManyToManyField(Project)
+    order = models.ManyToManyField(Project)
 
 
     def __str__(self):

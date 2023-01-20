@@ -44,7 +44,7 @@ class Project(models.Model):
         obj = Step.objects.filter(project__id =self.id).values()
         return obj
     def meetings(self):
-        from meetings.models import Meeting
+        from meets.models import Meeting
         obj = Meeting.objects.filter(order__id =self.id).values()
         return obj
     def moshtryat(self):
