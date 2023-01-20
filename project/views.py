@@ -208,7 +208,9 @@ def aStep(request,id):
         serialize = SteptSerializers(step, many=False)
         return Response(serialize.data)
     if request.method == 'PUT':
+        print('going to update')
         step = Step.objects.get(id=id)
+        print(step)
         list_of_search = [k for k, v in request.data.items()]
         if ('name' in list_of_search):
             name = request.data['name']
