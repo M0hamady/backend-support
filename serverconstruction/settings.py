@@ -92,8 +92,12 @@ WSGI_APPLICATION = 'serverconstruction.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': "defaultdb",
+        'USER': 'doadmin',
+        'PASSWORD': 'AVNS_BtQ4FboY2BGt_mPWOpO',
+        'HOST': 'db-mysql-fra1-79979-do-user-13270241-0.b.db.ondigitalocean.com',
+        'PORT': '25060',
     }
 }
 
@@ -127,13 +131,14 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = False
+USE_TZ = True
+TIME_ZONE = 'Africa/Egypt'
 
 
 # Static files (CSS, JavaScript, Images)

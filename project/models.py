@@ -17,8 +17,8 @@ class Project(models.Model):
     finished_at = models.DateTimeField(auto_now=False,null=True)
     address = models.CharField(max_length=300, null=True)
     cost = models.FloatField(null=True)
-    # worker =models.ManyToManyField(User_inf)
-    owner = models.ForeignKey(User,on_delete=models.DO_NOTHING, related_name='owner')
+    worker =models.ManyToManyField(User_inf)
+    owner = models.ForeignKey(User,on_delete=models.DO_NOTHING, related_name='owner',default=1)
     creator = models.ForeignKey(User,on_delete=models.DO_NOTHING, related_name='creator')
     manger = models.ForeignKey(User,on_delete=models.DO_NOTHING, blank=True,
         null=True, related_name='manager')
