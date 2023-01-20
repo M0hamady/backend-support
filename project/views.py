@@ -122,6 +122,7 @@ def exac_proj(request,id):
         pass
     elif request.method == "PUT":
         ''' her we gwt each update id for user'''
+        print('going to update')
         list_of_search = [k for k, v in request.data.items()]
         proj = Project.objects.get(id=id)
         if 'chang_civil' in list_of_search:
