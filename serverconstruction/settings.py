@@ -153,6 +153,7 @@ CORS_ALLOWED_ORIGINS = [
 "http://192.168.43.209:3000",
 "http://192.168.1.101:3000",
 "https://starfish-app-3c8ff.ondigitalocean.app",
+'https://octopus-app-8uosp.ondigitalocean.app'
 "http://127.0.0.1:3000",
 "http://172.20.10.7:3000",
 ]
