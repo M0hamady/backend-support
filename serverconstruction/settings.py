@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'useres',
-    'meetings',
+    'meets',
     'project',
 
 ]
@@ -95,8 +95,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': "defaultdb",
         'USER': 'doadmin',
-        'PASSWORD': 'AVNS_BtQ4FboY2BGt_mPWOpO',
-        'HOST': 'db-mysql-fra1-79979-do-user-13270241-0.b.db.ondigitalocean.com',
+        'PASSWORD': 'AVNS_m1Aj-EfK2V7TJj_AA4a',
+        'HOST': 'db-support-do-user-13270241-0.b.db.ondigitalocean.com',
         'PORT': '25060',
     }
 }

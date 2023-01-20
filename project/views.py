@@ -9,7 +9,7 @@ from rest_framework.decorators import api_view, permission_classes, authenticati
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from meetings.models import Meeting
+from meets.models import Meeting
 from project.models import Project, Step, Moshtarayet
 from project.serializers import ProjectSerializers, SteptSerializers
 from rest_framework.permissions import IsAuthenticated
