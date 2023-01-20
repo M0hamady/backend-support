@@ -199,7 +199,6 @@ def add_step(request,id):
         return Response({'projectid':step.project.id})
 
 
-@csrf_exempt
 @api_view(['GET','PUT'])
 @permission_classes((AllowAny,))
 def aStep(request,id):
