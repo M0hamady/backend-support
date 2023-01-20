@@ -1,5 +1,6 @@
 from rest_framework.authentication import BasicAuthentication,TokenAuthentication
 from django.shortcuts import render, get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 from django.utils.datetime_safe import datetime
@@ -198,7 +199,7 @@ def add_step(request,id):
         return Response({'projectid':step.project.id})
 
 
-
+@csrf_exempt
 @api_view(['GET','PUT'])
 @permission_classes((AllowAny,))
 def aStep(request,id):
