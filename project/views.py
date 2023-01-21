@@ -20,6 +20,7 @@ from django.conf import settings
 
 # first gitr all projects by date of creation
 #
+# @api_view(['GET','PUT'])
 @api_view(['GET','POST','PUT'])
 @authentication_classes([TokenAuthentication])
 # @permission_classes((IsAuthenticated,))
@@ -72,7 +73,6 @@ def project(request):
                 id_meet.save()
                 print('saved')
         return Response({'done':True})
-# @api_view(['GET','PUT'])
 # @authentication_classes([TokenAuthentication])
 # @permission_classes([IsAuthenticated])
 # def projectUpdate(request,id):
