@@ -33,3 +33,11 @@ class Websiteindex(models.Model):
 
     def __str__(self):
         return self.title_welcome
+class Montagat(models.Model):
+    name = models.CharField(max_length=126)
+    price = models.FloatField(max_length=126)
+    description = models.CharField(max_length=126)
+    location = models.CharField(max_length=126)
+    qesm = models.CharField(max_length=126)
+    def __str__(self):
+        return self.name

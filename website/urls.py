@@ -6,7 +6,8 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 from .views import *
 router = routers.DefaultRouter()
-router.register('', Website_index)
+router.register('website', Website_index)
+router.register('montgat', MontagatView)
 urlpatterns = [
     path('', include(router.urls)),
 
