@@ -106,6 +106,7 @@ def is_admin(request):
                 if user_id:
                     user = User.objects.get(auth_token=user_id)
                     user_inf = User_inf.objects.get(user=user)
+                    print(user_inf,'is login')
                     if user_inf.is_manager :
                         # print('admin')
                         return Response({'is_admin': True})
