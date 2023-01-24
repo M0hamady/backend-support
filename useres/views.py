@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view, permission_classes, authenticati
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import authentication, permissions, generics
+from rest_framework import authentication, permissions, generics, viewsets
 from rest_framework.authtoken.models import Token
 from .serializers import UserSerializers, RegisterSerializer, User_Serualizer
 from .models import User as User_inf
@@ -130,15 +130,29 @@ def user(request):
                     # print(6)
                 except:
                     try:
-                        # print(request.data['token'],959595595)
-                        user_id =  Token.objects.get(key =str(request.data['token']))
-                        # print(user_id, 000000000000)
-                    except: return Response({'nessage':"auth failed token value err 1"})
+                        print(request.data['token'],959595595)
+                        user_id =  Token.objects.get(key =request.data['token'])
+                        print(user_id, 000000000000)
+                    except: return Response({'message':"auth failed token value err 1"})
                 if user_id:
                     user = User.objects.get(auth_token=user_id)
+                    print(user)
                     user_inf = User_inf.objects.get(user=user)
-                    serialize = UserSerializers(user_inf , many=False)
-                    return Response(serialize.data) #serialize.data
-            except : return Response({'nessage':"auth failed token value err"})
+                    print(user_inf)
+                    try:
+                        serialize = UserSerializers(user_inf , context={'request': request})
+                        return Response(serialize.data)
+                    except Exception as e:return Response({'message':f"serializer err {e}"})
+                     #serialize.data
+            except : return Response({'message':"auth failed token value err"})
         else:return Response({'messsage':'no token in body'})
 
+class UserView(viewsets.ModelViewSet):
+    queryset = User_inf.objects.all()
+    serializer_class =UserSerializers
+
+    def retrieve(self, request, pk=None):
+        queryset = User_inf.objects.all()
+        user = User_inf.objects.get(user=User.objects.get(auth_token = pk))
+        serializer = UserSerializers(user, context={'request': request})
+        return Response(serializer.data)

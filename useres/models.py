@@ -2,11 +2,12 @@ import uuid
 
 from django.conf import settings
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 # from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 from rest_framework.authtoken.admin import User as User_inf
+
+from project.models import Project
 
 '''
 visitor ip location info meeting phone 
@@ -21,13 +22,14 @@ class User(models.Model):
     # name = models.CharField(max_length=120, null=True)
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, related_name='auth_user',
-        on_delete=models.CASCADE, verbose_name=_("User")
+        on_delete=models.CASCADE, verbose_name=("User")
     )
     password = models.CharField(max_length=654 ,default='12345' )
     uuid = models.CharField(unique=False, default=uuid.uuid1,max_length=350)
     ip =  models.CharField(max_length=120, null=True)
     phone =  models.CharField(max_length=120, null=True)
     location =  models.CharField(max_length=120, null=True)
+    pic = models.ImageField(upload_to="useres/%y", null=True)
     # is_visitor = models.BooleanField(default=True)
     is_client = models.BooleanField(default=True)
     is_eng = models.BooleanField(default=False)
@@ -40,5 +42,8 @@ class User(models.Model):
     def __str__(self):
         return self.user.email
     def inf(self):
-        data =User_inf.objects.filter(id=1)
+        data =User_inf.objects.filter(id=self.id)
+        return data.values()
+    def projec(self):
+        data =Project.objects.filter(owner=self.user)
         return data.values()

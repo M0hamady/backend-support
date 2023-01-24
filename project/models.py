@@ -1,7 +1,7 @@
 from django.db import models
 # Create your models here.
 from rest_framework.authtoken.admin import User
-from  useres.models import User as User_inf
+# from  useres.models import User as User_inf
 
 '''
 project is finished -created at - cost - finished at - 
@@ -17,7 +17,7 @@ class Project(models.Model):
     finished_at = models.DateTimeField(auto_now=False,null=True)
     address = models.CharField(max_length=300, null=True)
     cost = models.FloatField(null=True)
-    worker =models.ManyToManyField(User_inf)
+    worker =models.ManyToManyField('useres.User')
     owner = models.ForeignKey(User,on_delete=models.DO_NOTHING, related_name='owner',default=1)
     creator = models.ForeignKey(User,on_delete=models.DO_NOTHING, related_name='creator')
     manger = models.ForeignKey(User,on_delete=models.DO_NOTHING, blank=True,
