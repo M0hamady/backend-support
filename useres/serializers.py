@@ -9,7 +9,7 @@ from rest_framework import serializers
 class UserSerializers(serializers.ModelSerializer):
     info = serializers.ListField(source='inf')
     projects = serializers.ListField(source='projec')
-    percent = serializers.IntegerField(source='project_percent')
+    last_project_percent = serializers.IntegerField(source='project_percent')
     class Meta:
         model = User_inf
         fields = "__all__"
