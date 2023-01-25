@@ -40,6 +40,9 @@ class Project(models.Model):
     @property
     def steps_count(self):
         return Step.objects.filter(project__id =self.id).count()
+    @property
+    def steps_countFinshed(self):
+        return Step.objects.filter(project__id =self.id , is_finished =True).count()
     def steps(self):
         obj = Step.objects.filter(project__id =self.id).values()
         return obj

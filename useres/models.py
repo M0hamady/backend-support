@@ -47,3 +47,11 @@ class User(models.Model):
     def projec(self):
         data =Project.objects.filter(owner=self.user)
         return data.values()
+    def project_percent(self):
+        data =Project.objects.filter(owner=self.user).reverse()[0]
+        lenght=     data.steps_count
+        print(lenght,type(lenght))
+        finshed_count =data.steps_countFinshed
+        print(finshed_count,type(finshed_count))
+        percent = finshed_count//lenght
+        return  percent

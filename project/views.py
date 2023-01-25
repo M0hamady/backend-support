@@ -26,9 +26,8 @@ from django.conf import settings
 # @permission_classes((IsAuthenticated,))
 @permission_classes([IsAuthenticated])
 def project(request):
-    # print(request.sesion)
     if request.method == 'GET':
-        # print(request.headers)
+        print(request.headers)
         try:
             project = Project.objects.all().order_by('-created_at')
             serialize = ProjectSerializers(project, many= True)
@@ -211,7 +210,7 @@ def aStep(request,id):
     if request.method == 'PUT':
         print('going to update')
         step = Step.objects.get(id=id)
-        print(step)
+        print(step,5)
         list_of_search = [k for k, v in request.data.items()]
         if ('name' in list_of_search):
             name = request.data['name']
@@ -224,6 +223,7 @@ def aStep(request,id):
             step.finished_at =end
         if ('is_finished' in list_of_search):
             is_finished = request.data['is_finished']
+            print('changed')
             if is_finished == 'false':
                 is_finished = False
             else: is_finished = True
