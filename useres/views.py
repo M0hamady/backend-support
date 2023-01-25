@@ -7,6 +7,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions, generics, viewsets
 from rest_framework.authtoken.models import Token
+
+from project.models import Project
+from project.serializers import ProjectSerializers
 from .serializers import UserSerializers, RegisterSerializer, User_Serualizer
 from .models import User as User_inf
 from django.shortcuts import get_object_or_404
@@ -141,7 +144,7 @@ def user(request):
                     print(user_inf)
                     try:
                         serialize = UserSerializers(user_inf , context={'request': request})
-                        return Response(serialize.data)
+                        return Response(serialize.data )
                     except Exception as e:return Response({'message':f"serializer err {e}"})
                      #serialize.data
             except : return Response({'message':"auth failed token value err"})

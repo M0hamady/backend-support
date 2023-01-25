@@ -10,6 +10,7 @@ class UserSerializers(serializers.ModelSerializer):
     info = serializers.ListField(source='inf')
     projects = serializers.ListField(source='projec')
     last_project_percent = serializers.IntegerField(source='project_percent')
+    projec_steps = serializers.ListField(source='projec_step')
     class Meta:
         model = User_inf
         fields = "__all__"

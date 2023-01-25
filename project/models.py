@@ -97,7 +97,7 @@ class Step(models.Model):
     def moshtrayat(self):
         data = Moshtarayet.objects.filter(step__id=self.id).values()
         return data
-
+    @property
     def all_cost(self):
         data = Moshtarayet.objects.filter(step__id=self.id).values()
         costs = 0

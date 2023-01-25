@@ -7,7 +7,8 @@ from django.db import models
 # Create your models here.
 from rest_framework.authtoken.admin import User as User_inf
 
-from project.models import Project
+from project.models import Project, Step
+from project.serializers import ProjectSerializers, SteptSerializers
 
 '''
 visitor ip location info meeting phone 
@@ -46,7 +47,15 @@ class User(models.Model):
         return data.values()
     def projec(self):
         data =Project.objects.filter(owner=self.user)
-        return data.values()
+        serialize =ProjectSerializers(data,many=True)
+        return serialize.data
+    def projec_step(self):
+        try:
+            # print(Project.objects.filter(owner=self.user)[::-1][0])
+            data =Step.objects.filter(project__name=Project.objects.filter(owner=self.user)[::-1][0])
+            serialize =SteptSerializers(data ,many =True)
+            return serialize.data
+        except: return []
     def project_percent(self):
 
         try:
