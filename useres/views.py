@@ -169,8 +169,13 @@ class UserView(viewsets.ModelViewSet):
 def ProfileView(request):
     try:
         item = User_inf.objects.get(uuid=request.data['uuid'])
-    except User_inf.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+    except :
+        try:
+            user = User.objects.get(auth_token=request.data['token'])
+            print(user)
+            item = User_inf.objects.get (user = user.id)
+        except User_inf.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
     if request.method == "GET":
         serializer = UserSerializersMin(item,  context={'request': request})
         return Response(serializer.data)
