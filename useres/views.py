@@ -104,7 +104,7 @@ def is_admin(request):
         list_of_search = [k for k, v in request.data.items()]
         # print(list_of_search)
         if 'token' in list_of_search:
-            # print(request.data['token'])
+            print(request.data['token'])
             # print(1)
             try:
                 user_id =  Token.objects.get(key =request.data['token'] )
@@ -115,11 +115,13 @@ def is_admin(request):
                     print(user_inf,'is login')
                     if user_inf.is_manager :
                         # print('admin')
-                        return Response({'is_admin': True})
-            except:pass
+                        return Response({'is_admin': True, "uuid":user_inf.uuid})
+                    else:
+                        Response({'is_admin': False, "uuid": user_inf.uuid})
+            except:Response({'is_admin':False,"uuid":user_inf.uuid})
 
         print(list_of_search)
-        return Response({'is_admin':False})
+        return Response({'is_admin':False,"uuid":user_inf.uuid})
 
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
