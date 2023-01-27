@@ -14,6 +14,13 @@ class UserSerializers(serializers.ModelSerializer):
     class Meta:
         model = User_inf
         fields = "__all__"
+class UserSerializersMin(serializers.ModelSerializer):
+    info = serializers.ListField(source='inf')
+    projects = serializers.ListField(source='projec')
+    last_project_percent = serializers.IntegerField(source='project_percent')
+    class Meta:
+        model = User_inf
+        fields = "__all__"
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -64,4 +71,9 @@ class RegisterSerializer(serializers.ModelSerializer):
 class User_Serualizer(serializers.ModelSerializer):
     class Meta:
         model = User
+        fields = "__all__"
+
+class ChangeImagwSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User_inf
         fields = "__all__"

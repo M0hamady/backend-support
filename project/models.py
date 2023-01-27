@@ -40,7 +40,6 @@ class Project(models.Model):
     @property
     def steps_count(self):
         return Step.objects.filter(project__id =self.id).count()
-    @property
     def steps_countFinshed(self):
         return Step.objects.filter(project__id =self.id , is_finished =True).count()
     def steps(self):
@@ -71,6 +70,11 @@ class Project(models.Model):
                 for i in moshtrayat:
                     res = res +i['cost']
         return res
+    def finshed_oercent(self):
+        obj = Step.objects.filter(project__id=self.id).count()
+        objFinshed = Step.objects.filter(project__id=self.id,is_finished=True).count()
+        percent = objFinshed / obj *100
+        return percent
     def moshtryat_detail(self):
         obj = Step.objects.filter(project__id =self.id).values()
         res = []
@@ -80,9 +84,13 @@ class Project(models.Model):
             if moshtrayat :
                 res.append({'moshtrayat':moshtrayat,'step_name':i['name']})
         return res
+    def owner_name(self):
+        return self.owner.username
+
 class Step(models.Model):
     name = models.CharField( null= True,max_length=150)
     cost = models.FloatField(null=True)
+    show_to_owner = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now=True)
     start_at = models.DateField(auto_now=False,null=True)
     finished_at = models.DateTimeField(auto_now=False,null=True)
@@ -105,6 +113,7 @@ class Step(models.Model):
             costs = costs + int(i['cost'])
             # print(i['cost'])
         return costs
+
 
 
 class Images_step(models.Model):

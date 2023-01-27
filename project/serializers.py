@@ -17,6 +17,8 @@ class ProjectSerializers(serializers.ModelSerializer):
     mettings = serializers.ListField(source='meetings')
     count_steps = serializers.IntegerField(source='steps_count')
     cost = serializers.IntegerField(source='costes')
+    finshed_percent = serializers.FloatField(source='finshed_oercent')
+    ownerName = serializers.CharField(source='owner_name')
     # stepses = serializers.StringRelatedField(source='steps')
     class Meta:
         model = Project

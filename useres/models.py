@@ -26,7 +26,7 @@ class User(models.Model):
         on_delete=models.CASCADE, verbose_name=("User")
     )
     password = models.CharField(max_length=654 ,default='12345' )
-    uuid = models.CharField(unique=False, default=uuid.uuid1,max_length=350)
+    uuid = models.CharField(unique=True, default=uuid.uuid1,max_length=255)
     ip =  models.CharField(max_length=120, null=True)
     phone =  models.CharField(max_length=120, null=True)
     location =  models.CharField(max_length=120, null=True)

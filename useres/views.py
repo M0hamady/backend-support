@@ -1,16 +1,19 @@
+from django.http import JsonResponse
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.admin import User
 
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import authentication, permissions, generics, viewsets
+from rest_framework import authentication, permissions, generics, viewsets, status
 from rest_framework.authtoken.models import Token
 
 from project.models import Project
 from project.serializers import ProjectSerializers
-from .serializers import UserSerializers, RegisterSerializer, User_Serualizer
+from .serializers import UserSerializers, RegisterSerializer, User_Serualizer, ChangeImagwSerializer, UserSerializersMin
 from .models import User as User_inf
 from django.shortcuts import get_object_or_404
 
@@ -159,3 +162,19 @@ class UserView(viewsets.ModelViewSet):
         user = User_inf.objects.get(user=User.objects.get(auth_token = pk))
         serializer = UserSerializers(user, context={'request': request})
         return Response(serializer.data)
+
+@api_view(["GET", "PUT"])
+def ProfileView(request):
+    try:
+        item = User_inf.objects.get(uuid=request.data['uuid'])
+    except User_inf.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.method == "GET":
+        serializer = UserSerializersMin(item,  context={'request': request})
+        return Response(serializer.data)
+    elif request.method == "PUT":
+        serializer = UserSerializersMin(item, data=request.data, partial=True,context={'request': request})
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -10,6 +10,7 @@ urlpatterns = [
     path('is-admin/', is_admin),
     path('register/', RegisterView.as_view(), name='auth_register'),
     path('user/', user, name='auth'),
+    path('UpdateProfileView/', ProfileView, name='UpdateProfileView'),
     path('main-users/', main_users, name='auth'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
