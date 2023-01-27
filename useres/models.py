@@ -56,6 +56,21 @@ class User(models.Model):
             serialize =SteptSerializers(data ,many =True)
             return serialize.data
         except: return []
+    def numper_of_finished_projects(self):
+        res = 0
+        try:
+            project = Project.objects.filter(owner=self.user )
+            serialize =ProjectSerializers(project, many=True)
+            if serialize.data :
+                for i in serialize.data:
+                    print(1, 'from i in for',i['finshed_percent'])
+                    if int(i['finshed_percent']) > 99:
+                            print(1,'from i in for')
+                            res = res + 1
+                return res
+        except: return res
+
+
     def project_percent(self):
 
         try:

@@ -70,6 +70,7 @@ class Project(models.Model):
                 for i in moshtrayat:
                     res = res +i['cost']
         return res
+    @property
     def finshed_oercent(self):
         obj = Step.objects.filter(project__id=self.id).count()
         objFinshed = Step.objects.filter(project__id=self.id,is_finished=True).count()

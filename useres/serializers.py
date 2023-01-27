@@ -11,6 +11,7 @@ class UserSerializers(serializers.ModelSerializer):
     projects = serializers.ListField(source='projec')
     last_project_percent = serializers.IntegerField(source='project_percent')
     projec_steps = serializers.ListField(source='projec_step')
+    numper_of_finished_project = serializers.IntegerField(source='numper_of_finished_projects')
     class Meta:
         model = User_inf
         fields = "__all__"
@@ -18,6 +19,8 @@ class UserSerializersMin(serializers.ModelSerializer):
     info = serializers.ListField(source='inf')
     projects = serializers.ListField(source='projec')
     last_project_percent = serializers.IntegerField(source='project_percent')
+    numper_of_finished_project = serializers.IntegerField(source='numper_of_finished_projects')
+
     class Meta:
         model = User_inf
         fields = "__all__"
