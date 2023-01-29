@@ -36,7 +36,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
 
-    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    number = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
 
     class Meta:
@@ -47,17 +47,22 @@ class RegisterSerializer(serializers.ModelSerializer):
             'last_name': {'required': True}
         }
 
-    def validate(self, attrs):
-        if attrs['password'] != attrs['password2']:
-
-            raise serializers.ValidationError({"password": "Password fields didn't match."})
-        return attrs
+    # def validate(self, attrs):
+    #     if attrs['password'] != attrs['password2']:
+    #
+    #         raise serializers.ValidationError({"password": "Password fields didn't match."})
+    #     return attrs
 
     def validate_firstname(self, name_val):
         if 'ann' not in name_val.lower():
             raise serializers.ValidationError("error message")
 
         return name_val
+    def validate_number(self, num_val):
+        if '010' or '015' or '011' or '012'  not in num_val:
+            raise serializers.ValidationError("error message")
+
+        return num_val
 
     def create(self, validated_data):
         user = User.objects.create(

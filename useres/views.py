@@ -168,11 +168,12 @@ class UserView(viewsets.ModelViewSet):
 @api_view(["GET", "PUT"])
 def ProfileView(request):
     try:
-        item = User_inf.objects.get(uuid=request.data['uuid'])
+        item = User_inf.objects.get(user=User.objects.get(auth_token=request.data['token']))
+        print('first step',item)
     except :
         try:
             user = User.objects.get(auth_token=request.data['token'])
-            print(user)
+            print(user,5555555555555)
             item = User_inf.objects.get (user = user.id)
         except User_inf.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
