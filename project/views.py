@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.datetime_safe import datetime
 from rest_framework.authtoken.admin import User
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
 
 from meets.models import Meeting
@@ -20,23 +20,27 @@ from django.conf import settings
 
 # first gitr all projects by date of creation
 #
+# USER [ROJECTS
+@api_view(['GET','POST','PUT'])
+@authentication_classes([TokenAuthentication])
+def user_projects(request):
+    if request.method =="GET":
+        projects = Project.objects.filter(owner =request.user)
+        serializer = ProjectSerializers(projects,many=True)
+        return Response(serializer.data)
 # @api_view(['GET','PUT'])
 @api_view(['GET','POST','PUT'])
 @authentication_classes([TokenAuthentication])
-# @permission_classes((IsAuthenticated,))
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated,IsAdminUser])
 def project(request):
-    if request.method == 'GET':
-        print(request.headers)
+    if request.method == 'GET' :
         try:
             project = Project.objects.all().order_by('-created_at')
             serialize = ProjectSerializers(project, many= True)
         except: return ({'message':'ther is no data for project'})
-        # serialize.data.popitem('test','test res')
 
         return Response(serialize.data)
     elif request.method == "POST":
-        print(request,55,request)
         list_of_search = [k for k, v in request.data.items()]
         if ('name' in list_of_search):
             name_ = request.data['name']
@@ -45,7 +49,6 @@ def project(request):
         if ('owner' in list_of_search):
             owner = Token.objects.get(key =str(request.data['owner']).split(' ')[0])
             print(str(request.data['owner']).split(' '),545454)
-        print(list_of_search)
         project = Project.objects.create(
             name=name_,
             address=address_,

@@ -14,7 +14,7 @@ class ProjectSerializers(serializers.ModelSerializer):
     step = serializers.ListField(source='steps')
     mosh = serializers.ListField(source='moshtryat')
     mosh_detail = serializers.ListField(source='moshtryat_detail')
-    mettings = serializers.ListField(source='meetings')
+    # mettings = serializers.ListField(source='meetings')
     count_steps = serializers.IntegerField(source='steps_count')
     cost = serializers.IntegerField(source='costes')
     finshed_percent = serializers.FloatField(source='finshed_oercent')

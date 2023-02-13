@@ -7,6 +7,7 @@ from .views import *
 
 urlpatterns = [
     path('', project),
+    path('user/', user_projects),
     path('step/', step),
     path('step/<int:id>/', exac_step),
     path('astep/<int:id>/', aStep),
