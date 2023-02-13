@@ -1,11 +1,18 @@
-from  rest_framework import permissions
-from useres.models import User
-from django.contrib.auth.backends import BaseBackend
+from rest_framework.permissions import BasePermission
 
-class MyBackend(BaseBackend):
-    def authenticate(self, request, token=None):
-        # Check the token and return a user.
-        if User.objects.get(user =request.user).is_manager:
-            return True
-        return False
-        
+from useres.models import User
+
+class IsManager(BasePermission):
+    """
+    Allows access only to manager users.
+    """
+
+    def has_permission(self, request, view):
+        return bool(request.user and User.objects.get(user = request.user).is_manager)
+class IsEng(BasePermission):
+    """
+    Allows access only to engineer users.
+    """
+
+    def has_permission(self, request, view):
+        return bool(request.user and User.objects.get(user = request.user).is_eng)

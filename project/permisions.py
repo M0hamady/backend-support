@@ -1,10 +1,11 @@
 from  rest_framework import permissions
+from useres.models import User
+from django.contrib.auth.backends import BaseBackend
 
-class IsAuthor(permissions.BasePermission):
-    '''reqyest will check if user is the owner of project'''
-
-    def has_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
+class MyBackend(BaseBackend):
+    def authenticate(self, request, token=None):
+        # Check the token and return a user.
+        if User.objects.get(user =request.user).is_manager:
             return True
-        return obj.au
-    # pass
+        return False
+        

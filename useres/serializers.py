@@ -27,6 +27,7 @@ class UserSerializersMin(serializers.ModelSerializer):
 
 
 class RegisterSerializer(serializers.ModelSerializer):
+    
     email = serializers.EmailField(
         required=True,
         validators=[UniqueValidator(queryset=User.objects.all())]
@@ -36,33 +37,32 @@ class RegisterSerializer(serializers.ModelSerializer):
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
 
-    number = serializers.CharField(write_only=True, required=True, validators=[validate_password])
-    password2 = serializers.CharField(write_only=True, required=True)
+    number = serializers.CharField(write_only=True, required=True, )
+    password2 = serializers.CharField(write_only=True, required=True,)
 
     class Meta:
         model = User
-        fields = ('username', 'password', 'password2', 'email', 'first_name', 'last_name')
+        fields = ('username', 'password', 'password2', 'email', 'first_name', 'last_name',"number")
         extra_kwargs = {
             'first_name': {'required': True},
             'last_name': {'required': True}
         }
+    def validate_number(self, val):
+        if '010' or '015' or '011' or '012'  in val[0:3]:
+            return val
+        raise serializers.ValidationError("error message")
 
-    # def validate(self, attrs):
-    #     if attrs['password'] != attrs['password2']:
-    #
-    #         raise serializers.ValidationError({"password": "Password fields didn't match."})
-    #     return attrs
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password2']:
+    
+            raise serializers.ValidationError({"password": "Password fields didn't match."})
+        return attrs
 
     def validate_firstname(self, name_val):
         if 'ann' not in name_val.lower():
             raise serializers.ValidationError("error message")
 
         return name_val
-    def validate_number(self, num_val):
-        if '010' or '015' or '011' or '012'  not in num_val:
-            raise serializers.ValidationError("error message")
-
-        return num_val
 
     def create(self, validated_data):
         user = User.objects.create(
@@ -74,6 +74,11 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         user.set_password(validated_data['password'])
         user.save()
+        user_inf = User_inf.objects.create(
+            user = user,
+            phone =validated_data['number']
+        )
+        user_inf.save()
 
         return user
 class User_Serualizer(serializers.ModelSerializer):

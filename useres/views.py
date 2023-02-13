@@ -4,7 +4,7 @@ from rest_framework.authtoken.admin import User
 
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.parsers import MultiPartParser
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -16,24 +16,23 @@ from project.serializers import ProjectSerializers
 from .serializers import UserSerializers, RegisterSerializer, User_Serualizer, ChangeImagwSerializer, UserSerializersMin
 from .models import User as User_inf
 from django.shortcuts import get_object_or_404
-
-
+# not used
 @api_view(['GET','POST'])
-@permission_classes((AllowAny,))
+@permission_classes((IsAdminUser))
 def main_users(request):
     if request.method == 'GET':
         users = User.objects.all()
         # print(1)
         serializer = User_Serualizer(users, many=True)
         # print(serializer.data)
-        return Response(serializer.data)
-@api_view(['GET','POST'])
-@permission_classes((AllowAny,))
+        # return Response(serializer.data)
+# not used
+@permission_classes((IsAuthenticated,IsAdminUser))
 def users(request):
     if request.method == 'GET':
         users =User_inf.objects.all()
         # print(1)
-        serializer=  UserSerializers(users,many=True)
+        serializer=  ChangeImagwSerializer(users,many=True)
         # print(serializer.data)
         return Response(serializer.data)
     elif request.method == "POST":
@@ -87,13 +86,13 @@ def users(request):
         serializer = UserSerializers(users, many=True)
         return Response(serializer.data)
 
-
+#not used
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
 
-
+# not used
 @api_view(['PUT'])
 def is_admin(request):
     '''
@@ -123,38 +122,19 @@ def is_admin(request):
         print(list_of_search)
         return Response({'is_admin':False,"uuid":user_inf.uuid})
 
+@api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
-@api_view(['PUT'])
+# not used
 def user(request):
-    if request.method == 'PUT':
-        list_of_search = [k for k, v in request.data.items()]
-        # print(list_of_search,request.data)
-        if 'token' in list_of_search:
-            try:
-                try:
-                    # print(str(request.data['token']).split(' ')[1],1111111111111)
-                    user_id =  Token.objects.get(key =str(request.data['token']).split(' ')[1])
-                    # print(6)
-                except:
-                    try:
-                        print(request.data['token'],959595595)
-                        user_id =  Token.objects.get(key =request.data['token'])
-                        print(user_id, 000000000000)
-                    except: return Response({'message':"auth failed token value err 1"})
-                if user_id:
-                    user = User.objects.get(auth_token=user_id)
-                    print(user)
-                    user_inf = User_inf.objects.get(user=user)
-                    print(user_inf)
-                    try:
-                        serialize = UserSerializers(user_inf , context={'request': request})
-                        return Response(serialize.data )
-                    except Exception as e:return Response({'message':f"serializer err {e}"})
-                     #serialize.data
-            except : return Response({'message':"auth failed token value err"})
-        else:return Response({'messsage':'no token in body'})
-
+    if request.method == 'GET':
+        try:
+            user_inf = User_inf.objects.get(user=request.user)
+            serialize = UserSerializers(user_inf , context={'request': request})
+            return Response(serialize.data )
+        except Exception as e:return Response({'message':f"serializer err {e}"})
+         #serialize.data
+# not used
 class UserView(viewsets.ModelViewSet):
     queryset = User_inf.objects.all()
     serializer_class =UserSerializers
@@ -166,23 +146,19 @@ class UserView(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 @api_view(["GET", "PUT"])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def ProfileView(request):
     try:
-        item = User_inf.objects.get(user=User.objects.get(auth_token=request.data['token']))
-        print('first step',item)
-    except :
-        try:
-            user = User.objects.get(auth_token=request.data['token'])
-            print(user,5555555555555)
-            item = User_inf.objects.get (user = user.id)
-        except User_inf.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        item = User_inf.objects.get (user = request.user.id)
+    except User_inf.DoesNotExist as e:
+        return Response(e,status=status.HTTP_404_NOT_FOUND)
     if request.method == "GET":
         serializer = UserSerializersMin(item,  context={'request': request})
         return Response(serializer.data)
     elif request.method == "PUT":
         serializer = UserSerializersMin(item, data=request.data, partial=True,context={'request': request})
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
