@@ -11,18 +11,22 @@ from rest_framework.response import Response
 
 from meets.models import Meeting
 from project.models import Project, Step, Moshtarayet
-from project.serializers import ProjectSerializers, SteptSerializers
+from project.serializers import ProjectSerializers, SteptSerializers, MoshtrayatSerializers, UpdateSteptSerializers
 from rest_framework.permissions import IsAuthenticated
 from  django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django.conf import settings
 
+from useres.permisions import IsManager
+
+
 # first gitr all projects by date of creation
 #
 # USER [ROJECTS
 @api_view(['GET','POST','PUT'])
 @authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def user_projects(request):
     if request.method =="GET":
         projects = Project.objects.filter(owner =request.user)
@@ -31,7 +35,7 @@ def user_projects(request):
 # @api_view(['GET','PUT'])
 @api_view(['GET','POST','PUT'])
 @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated,IsAdminUser])
+@permission_classes([IsAuthenticated,IsAdminUser,IsManager])
 def project(request):
     if request.method == 'GET' :
         try:
@@ -145,8 +149,8 @@ def exac_proj(request,id):
 @permission_classes((AllowAny,))
 def moshtrayat(request,id):
     if request.method == 'GET':
-        proj = Moshtarayet.objects.all()
-        serialize = ProjectSerializers(proj,many=False)
+        step_moshtrayat = Moshtarayet.objects.filter(step = id)
+        serialize = MoshtrayatSerializers(step_moshtrayat,many=True)
         return Response(serialize.data)
     if request.method == 'POST':
         # id of ites step
@@ -163,19 +167,12 @@ def moshtrayat(request,id):
 
         return Response({'projectid':step.project.id})
     if request.method == 'PUT':
-        list_of_search = [k for k, v in request.data.items()]
-        if 'name' in list_of_search:
-            name = request.data['name']
-        if 'cost' in list_of_search:
-            cost = int(request.data['cost'])
-
-        moshtra = get_object_or_404(Moshtarayet, id = id)
-        moshtra.name =name
-        moshtra.cost = cost
-        moshtra.save()
-        print(moshtra.step.project.id,55555)
-
-        return Response({'projectid':moshtra.step.project.id})
+        step = get_object_or_404(Step, id = id)
+        serialize =UpdateSteptSerializers(step,data=request.data, many=False)
+        if serialize.is_valid():
+            serialize.save()
+            return Response(serialize.data)
+        return Response(serialize.errors)
 
 @api_view(['POST'])
 @permission_classes((AllowAny,))
@@ -203,7 +200,8 @@ def add_step(request,id):
 
 @csrf_exempt
 @api_view(['GET','PUT'])
-@permission_classes((AllowAny,))
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def aStep(request,id):
     if request.method == 'GET':
         step = Step.objects.get(id=id)

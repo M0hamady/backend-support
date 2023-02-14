@@ -9,6 +9,13 @@ class IsManager(BasePermission):
 
     def has_permission(self, request, view):
         return bool(request.user and User.objects.get(user = request.user).is_manager)
+class IsProjectOwner(BasePermission):
+    """
+    Allows access only to manager users.
+    """
+
+    def has_permission(self, request, view):
+        return bool(request.user == User.objects.get(user = request.user).owner)
 class IsEng(BasePermission):
     """
     Allows access only to engineer users.

@@ -28,8 +28,8 @@ def main_users(request):
         # return Response(serializer.data)
 # not used
 @api_view(['GET','POST'])
-@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication])
 def users(request):
     if request.method == 'GET':
         users =User_inf.objects.all()
@@ -127,14 +127,14 @@ def is_admin(request):
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
-# not used
 def user(request):
+    try:
+        user_inf = User_inf.objects.get(user=request.user)
+    except :
+        return Response({'message': f"serializer err "})
     if request.method == 'GET':
-        try:
-            user_inf = User_inf.objects.get(user=request.user)
-            serialize = UserSerializers(user_inf , context={'request': request})
-            return Response(serialize.data )
-        except Exception as e:return Response({'message':f"serializer err {e}"})
+        serialize = UserSerializers(user_inf, context={'request': request})
+        return Response(serialize.data)
          #serialize.data
 # not used
 class UserView(viewsets.ModelViewSet):

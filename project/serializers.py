@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from .models import Project, Step
+from .models import Project, Step, Moshtarayet
+
 
 class SteptSerializers(serializers.ModelSerializer):
     count_moshtrayat = serializers.IntegerField(source='moshtrayat_count')
@@ -9,6 +10,14 @@ class SteptSerializers(serializers.ModelSerializer):
     class Meta:
         model = Step
         fields = "__all__"
+class UpdateSteptSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Step
+        fields = ('name','cost','show_to_owner','start_at','finished_at','is_finished','project')
+        extra_kwargs = {
+            'project': {'required': False},
+            'name': {'required': False}
+        }
 class ProjectSerializers(serializers.ModelSerializer):
     # steps = serializers.StringRelatedField(many=True)
     step = serializers.ListField(source='steps')
@@ -24,3 +33,8 @@ class ProjectSerializers(serializers.ModelSerializer):
         model = Project
         fields = "__all__"
 
+class MoshtrayatSerializers(serializers.ModelSerializer):
+
+    class Meta:
+        model = Moshtarayet
+        fields = "__all__"

@@ -10,6 +10,7 @@ address
 connected to steps
 
 '''
+import uuid
 class Project(models.Model):
     name = models.CharField(max_length=150,null=True)
     created_at = models.DateTimeField(auto_now=True)
@@ -26,7 +27,7 @@ class Project(models.Model):
         null=True, related_name='civil_eng')
     designer_eng = models.ForeignKey(User,on_delete=models.DO_NOTHING, blank=True,
         null=True, related_name='designer')
-
+    uuid = models.CharField(default=uuid.uuid4(),null=True,max_length=100)
     # owner =/
 
     # meeting
