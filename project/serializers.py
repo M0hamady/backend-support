@@ -38,3 +38,15 @@ class MoshtrayatSerializers(serializers.ModelSerializer):
     class Meta:
         model = Moshtarayet
         fields = "__all__"
+
+    def create(self, validated_data):
+        return Moshtarayet.objects.create(**validated_data)
+
+class ProjectSerializersSimple(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = "__all__"
+        extra_kwargs = {
+            'creator': {'required': False},
+            'worker': {'required': False}
+        }

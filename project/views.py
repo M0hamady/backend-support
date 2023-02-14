@@ -11,7 +11,8 @@ from rest_framework.response import Response
 
 from meets.models import Meeting
 from project.models import Project, Step, Moshtarayet
-from project.serializers import ProjectSerializers, SteptSerializers, MoshtrayatSerializers, UpdateSteptSerializers
+from project.serializers import ProjectSerializers, SteptSerializers, MoshtrayatSerializers, UpdateSteptSerializers, \
+    ProjectSerializersSimple
 from rest_framework.permissions import IsAuthenticated
 from  django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -40,7 +41,7 @@ def project(request):
     if request.method == 'GET' :
         try:
             project = Project.objects.all().order_by('-created_at')
-            serialize = ProjectSerializers(project, many= True)
+            serialize = ProjectSerializersSimple(project, many= True)
         except: return ({'message':'ther is no data for project'})
 
         return Response(serialize.data)
@@ -117,36 +118,25 @@ def exac_step(request,id):
 @api_view(['GET','POST','PUT'])
 @permission_classes((AllowAny,))
 def exac_proj(request,id):
+    try:
+        proj = Project.objects.get(id=id)
+    except:
+        return ({'message': 'ther is no data for that project'})
     if request.method == 'GET':
-        try:
-            proj = Project.objects.get(id =id)
-        # print(proj.steps())
-            serialize = ProjectSerializers(proj,many=False)
-        except:
-            return ({'message': 'ther is no data for that project'})
+        serialize = ProjectSerializersSimple(proj,many=False)
         return Response(serialize.data)
     elif request.method == 'POST':
         pass
     elif request.method == "PUT":
-        ''' her we gwt each update id for user'''
-        print('going to update')
-        list_of_search = [k for k, v in request.data.items()]
-        proj = Project.objects.get(id=id)
-        if 'chang_civil' in list_of_search:
-            civil_eng = request.data['chang_civil']
-            try:
-                proj.civil_eng =User.objects.get(id=civil_eng)
-            except:return Response({'message':"we can nit find this user contact admin"})
-        if 'chang_designer' in list_of_search:
-            chang_designer = request.data['chang_designer']
-            try:
-                proj.designer_eng =User.objects.get(id=chang_designer)
-            except: return Response({'message':"we can nit find this user contact admin "})
-        proj.save()
-        serialize = ProjectSerializers(proj, many=False)
-        return Response(serialize.data)
+        ''' her we gwt each update id for project'''
+        serialize = ProjectSerializersSimple(proj, data=request.data,many=False ,partial=True)
+        if serialize.is_valid():
+            serialize.save()
+            return Response(serialize.data)
+        return Response(serialize.errors)
 @api_view(['GET','POST','PUT'])
-@permission_classes((AllowAny,))
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated,IsAdminUser,IsManager])
 def moshtrayat(request,id):
     if request.method == 'GET':
         step_moshtrayat = Moshtarayet.objects.filter(step = id)
@@ -154,21 +144,14 @@ def moshtrayat(request,id):
         return Response(serialize.data)
     if request.method == 'POST':
         # id of ites step
-        step = Step.objects.get(id =id)
-        name = request.data['name']
-        cost = int(request.data['cost'])
-
-        moshtra = Moshtarayet.objects.create(
-            name=name,
-            cost=cost,
-            step = step,
-        )
-        moshtra.save()
-
-        return Response({'projectid':step.project.id})
+        serializer = MoshtrayatSerializers(  data=request.data  , partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
     if request.method == 'PUT':
-        step = get_object_or_404(Step, id = id)
-        serialize =UpdateSteptSerializers(step,data=request.data, many=False)
+        step = get_object_or_404(Moshtarayet, id = id)
+        serialize =MoshtrayatSerializers(step,data=request.data, many=False,partial=True)
         if serialize.is_valid():
             serialize.save()
             return Response(serialize.data)
