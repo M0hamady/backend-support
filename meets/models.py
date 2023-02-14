@@ -21,10 +21,10 @@ class Meet(models.Model):
     meet_at = models.DateField(auto_now=False,null=True)
     meet_time = models.TimeField(auto_now=False,null=True)
     # order = models.ManyToManyField(Project)
-    # user = models.OneToOneField(
-    #     settings.AUTH_USER_MODEL, related_name='auth_user_meet',
-    #     on_delete=models.CASCADE, verbose_name=("User"),
-    # )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name='auth_user_meet',
+        on_delete=models.CASCADE, verbose_name=("User"),
+    )
 
     def __str__(self):
         return self.name
