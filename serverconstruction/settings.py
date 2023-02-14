@@ -97,8 +97,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': "defaultdb",
         'USER': 'doadmin',
-        'PASSWORD': 'AVNS_m1Aj-EfK2V7TJj_AA4a',
-        'HOST': 'db-support-do-user-13270241-0.b.db.ondigitalocean.com',
+        'PASSWORD': 'AVNS_IpCdKXuPJSHSGknWz89',
+        'HOST': 'constructor-db-do-user-13270241-0.b.db.ondigitalocean.com',
         'PORT': '25060',
     }
 }

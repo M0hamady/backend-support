@@ -9,7 +9,7 @@ from rest_framework.decorators import api_view, permission_classes, authenticati
 from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
 
-from meets.models import Meeting
+from meets.models import Meet as Meeting
 from project.models import Project, Step, Moshtarayet
 from project.serializers import ProjectSerializers, SteptSerializers, MoshtrayatSerializers, UpdateSteptSerializers, \
     ProjectSerializersSimple

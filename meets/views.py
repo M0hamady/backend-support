@@ -2,83 +2,33 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.utils.datetime_safe import datetime
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from .models import Meeting
+from .models import Meet as Meeting
 from .serializers import MeetingSerializers
 
 
 @api_view(['GET','POST'])
-@permission_classes((AllowAny,))
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def meeting(request):
-    if request.method == 'GET':
-        list_of_search = [k for k, v in request.data.items()]
-        print(list_of_search)
-        if 'today' and 'is_accepted' and 'is_succeded' in list_of_search:
-            day = datetime.today()
-            date_today = str(day.year) + '-' + str(day.month) + '-' + str(day.day)
-            users = Meeting.objects.filter(meet_at=date_today,is_accepted=request.data['is_accepted'],is_succeded=request.data['is_succeded'])
-        elif 'today' and 'is_accepted' in list_of_search:
-            day = datetime.today()
-            date_today = str(day.year) + '-' + str(day.month) + '-' + str(day.day)
-            users = Meeting.objects.filter(meet_at=date_today,is_accepted=request.data['is_accepted'])
-        elif 'today' and 'is_success' in list_of_search:
-            day = datetime.today()
-            date_today = str(day.year) + '-' + str(day.month) + '-' + str(day.day)
-            users = Meeting.objects.filter(meet_at=date_today, is_success=request.data['is_success'])
-        elif 'is_accepted' in list_of_search:
-            users = Meeting.objects.filter(is_accepted=request.data['is_accepted'])
-        elif 'last_ip' in list_of_search:
-            # users = Meeting.objects.filter(last_ip=True)
-            pass
-        elif 'today' in list_of_search:
-            day = datetime.today()
-            date_today= str(day.year)+'-'+ str(day.month)+'-' + str(day.day)
-            print(date_today, 55)
-            users = Meeting.objects.filter(meet_at = date_today)
-        elif 'is_success' in list_of_search:
-            users = Meeting.objects.filter(is_success=request.data['is_success'])
-        else:users =Meeting.objects.all().order_by('-created_at')
-        serializer = MeetingSerializers(users,many=True)
-        # print(serializer.data)
+
+    if request.method == "GET":
+        try:
+            users = Meeting.objects.get(user=request.user)
+            serializer = MeetingSerializers(users,many=False)
+        except Exception as e:
+            return Response({'messge': f'does not exust create a meeting'})
         return Response(serializer.data)
     elif request.method == "POST":
-        list_of_search = [k for k, v in request.data.items()]
-        if ('time' in list_of_search):
-             time = request.data['time']
-        if ('date' in list_of_search):
-             date = request.data['date']
-        if ('ip' in list_of_search):
-            ip = request.data['ip']
-        if ('name' in list_of_search):
-            name = request.data['name']
-        if ('location' in list_of_search):
-            location = request.data['location']
-        if ('number' in list_of_search):
-            number = request.data['number']
-        if ('order' in list_of_search):
-            proj = request.data['order']
-            # it will get id of meeting and then make update to meeting in project
-
-
-        user= Meeting.objects.create(
-            location = location,
-            number = number,
-            name = name,
-            last_ip = ip,
-            is_success=False,
-            meet_at =date,
-            meet_time =time,
-        )
-        # if user.is_valid():
-        print(user)
-        user.save()
-        # except:return Response({'done':False})
-        # users = Meeting.objects.all()
-        # serializer = MeetingSerializers(users, many=True)
-        return Response({'done':True})
+        serialize = MeetingSerializers(data=request.data, partial=True)
+        if serialize.is_valid():
+            serialize.save()
+            return Response(serialize.data)
+        return Response(serialize.errors)
 @api_view(['PUT'])
 @permission_classes((AllowAny,))
 def meeting_Update(request,id):
@@ -112,8 +62,9 @@ def meeting_Update(request,id):
         else:return Response({'done':False})
 
 
-@api_view(['GET'])
-@permission_classes((AllowAny,))
+@api_view(['GET','post'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def get_exact_meating(request,id):
     if request.method == 'GET':
         meet = Meeting.objects.get(id=id)

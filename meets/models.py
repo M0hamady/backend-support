@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 from project.models import Project
@@ -9,7 +10,7 @@ time location request_meet attendant   is succeded
 
 '''
 # Create your models here.
-class Meeting(models.Model):
+class Meet(models.Model):
     created_at = models.DateTimeField(auto_now=True)
     location =models.CharField(max_length=150,null=True)
     number =models.CharField(max_length=150,null=True)
@@ -19,8 +20,11 @@ class Meeting(models.Model):
     last_ip =models.CharField(max_length=150,null=True)
     meet_at = models.DateField(auto_now=False,null=True)
     meet_time = models.TimeField(auto_now=False,null=True)
-    order = models.ManyToManyField(Project)
-
+    # order = models.ManyToManyField(Project)
+    # user = models.OneToOneField(
+    #     settings.AUTH_USER_MODEL, related_name='auth_user_meet',
+    #     on_delete=models.CASCADE, verbose_name=("User"),
+    # )
 
     def __str__(self):
         return self.name
