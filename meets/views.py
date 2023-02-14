@@ -18,7 +18,7 @@ def meeting(request):
 
     if request.method == "GET":
         try:
-            users = Meeting.objects.get(user=request.user)
+            users = Meeting.objects.filter(user=request.user).last()
             serializer = MeetingSerializers(users,many=False)
         except Exception as e:
             return Response({'messge': f'does not exust create a meeting'})
