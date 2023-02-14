@@ -30,7 +30,9 @@ from useres.permisions import IsManager
 @permission_classes([IsAuthenticated])
 def user_projects(request):
     if request.method =="GET":
-        projects = Project.objects.filter(owner =request.user)
+        try:
+            projects = Project.objects.filter(owner =request.user)
+        except:return Response({"message":'this user has no project yet'})
         serializer = ProjectSerializers(projects,many=True)
         return Response(serializer.data)
 # @api_view(['GET','PUT'])
@@ -121,7 +123,7 @@ def exac_proj(request,id):
     try:
         proj = Project.objects.get(id=id)
     except:
-        return ({'message': 'ther is no data for that project'})
+        return Response({'message': 'ther is no data for that project'})
     if request.method == 'GET':
         serialize = ProjectSerializersSimple(proj,many=False)
         return Response(serialize.data)
@@ -139,7 +141,9 @@ def exac_proj(request,id):
 @permission_classes([IsAuthenticated,IsAdminUser,IsManager])
 def moshtrayat(request,id):
     if request.method == 'GET':
-        step_moshtrayat = Moshtarayet.objects.filter(step = id)
+        try:
+            step_moshtrayat = Moshtarayet.objects.filter(step = id)
+        except:return Response({'message': 'ther is no data for that project'})
         serialize = MoshtrayatSerializers(step_moshtrayat,many=True)
         return Response(serialize.data)
     if request.method == 'POST':
@@ -187,8 +191,9 @@ def add_step(request,id):
 @permission_classes([IsAuthenticated])
 def aStep(request,id):
     if request.method == 'GET':
-        step = Step.objects.get(id=id)
-        print(step)
+        try:
+            step = Step.objects.get(id=id)
+        except:return  Response({'message':'this project has no steps yet'})
         serialize = SteptSerializers(step, many=False)
         return Response(serialize.data)
     if request.method == 'PUT':
