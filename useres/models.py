@@ -79,6 +79,6 @@ class User(models.Model):
             print(lenght, type(lenght))
             finshed_count = data.steps_countFinshed
             print(finshed_count, type(finshed_count))
-            percent = finshed_count//lenght
+            percent = finshed_count /lenght
             return  percent
         except:return 0

@@ -73,10 +73,12 @@ class Project(models.Model):
         return res
     @property
     def finshed_oercent(self):
-        obj = Step.objects.filter(project__id=self.id).count()
-        objFinshed = Step.objects.filter(project__id=self.id,is_finished=True).count()
-        percent = objFinshed / obj *100
-        return percent
+        try:
+            obj = Step.objects.filter(project__id=self.id).count()
+            objFinshed = Step.objects.filter(project__id=self.id,is_finished=True).count()
+            percent = objFinshed // obj *100
+            return percent
+        except: return 0
     def moshtryat_detail(self):
         obj = Step.objects.filter(project__id =self.id).values()
         res = []
