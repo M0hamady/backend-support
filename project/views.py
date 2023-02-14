@@ -38,15 +38,14 @@ def user_projects(request):
 # @api_view(['GET','PUT'])
 @api_view(['GET','POST','PUT'])
 @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated,IsAdminUser,IsManager])
+@permission_classes([IsAuthenticated,])
 def project(request):
     if request.method == 'GET' :
         try:
             project = Project.objects.all().order_by('-created_at')
             serialize = ProjectSerializersSimple(project, many= True)
+            return Response(serialize.data)
         except: return ({'message':'ther is no data for project'})
-
-        return Response(serialize.data)
     elif request.method == "POST":
         list_of_search = [k for k, v in request.data.items()]
         if ('name' in list_of_search):
@@ -138,7 +137,7 @@ def exac_proj(request,id):
         return Response(serialize.errors)
 @api_view(['GET','POST','PUT'])
 @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated,IsAdminUser,IsManager])
+@permission_classes([IsAuthenticated])
 def moshtrayat(request,id):
     if request.method == 'GET':
         try:
