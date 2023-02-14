@@ -27,7 +27,9 @@ def main_users(request):
         # print(serializer.data)
         # return Response(serializer.data)
 # not used
-@permission_classes((IsAuthenticated,IsAdminUser))
+@api_view(['GET','POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def users(request):
     if request.method == 'GET':
         users =User_inf.objects.all()
