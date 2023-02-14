@@ -50,3 +50,13 @@ class ProjectSerializersSimple(serializers.ModelSerializer):
             'creator': {'required': False},
             'worker': {'required': False}
         }
+class ProjectSerializersSimpleWithSteps(serializers.ModelSerializer):
+    step = serializers.ListField(source='steps')
+    finshed_percent = serializers.FloatField(source='finshed_oercent')
+    class Meta:
+        model = Project
+        fields = "__all__"
+        extra_kwargs = {
+            'creator': {'required': False},
+            'worker': {'required': False}
+        }

@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from meets.models import Meet as Meeting
 from project.models import Project, Step, Moshtarayet
 from project.serializers import ProjectSerializers, SteptSerializers, MoshtrayatSerializers, UpdateSteptSerializers, \
-    ProjectSerializersSimple
+    ProjectSerializersSimple, ProjectSerializersSimpleWithSteps
 from rest_framework.permissions import IsAuthenticated
 from  django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -43,7 +43,7 @@ def project(request):
     if request.method == 'GET' :
         try:
             project = Project.objects.all().order_by('-created_at')
-            serialize = ProjectSerializersSimple(project, many= True)
+            serialize = ProjectSerializersSimpleWithSteps(project, many= True)
             return Response(serialize.data)
         except: return ({'message':'ther is no data for project'})
     elif request.method == "POST":
