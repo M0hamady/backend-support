@@ -98,6 +98,7 @@ class Step(models.Model):
     finished_at = models.DateTimeField(auto_now=False,null=True)
     is_finished =models.BooleanField(default=False)
     project =models.ForeignKey(Project,on_delete=models.CASCADE)
+    uuid = models.CharField(default=uuid.uuid4(),null=True,max_length=100)
 
     def __str__(self):
         return self.name
@@ -120,13 +121,15 @@ class Step(models.Model):
 
 class Images_step(models.Model):
     step = models.ForeignKey(Step,on_delete=models.CASCADE)
-    uuid = models.CharField(max_length=120, null=True)
-    # img= models.ImageField(null=True,upload_to="steps/images")
+    uuid = models.CharField(max_length=120, null=True,default=uuid.uuid4(),)
+    img= models.ImageField(null=True,upload_to="steps/images")
+
 class Moshtarayet(models.Model):
     name = models.CharField( null= True,max_length=150)
     cost = models.FloatField(null=True)
     created_at = models.DateTimeField(auto_now=True)
     step = models.ForeignKey(Step,on_delete=models.CASCADE)
+    uuid = models.CharField(default=uuid.uuid4(),null=True,max_length=100)
 
     def __str__(self):
         return self.name
