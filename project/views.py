@@ -162,27 +162,13 @@ def moshtrayat(request,id):
 
 @api_view(['POST'])
 @permission_classes((AllowAny,))
-def add_step(request,id):
+def add_step(request):
     if request.method == 'POST':
-        list_of_search = [k for k, v in request.data.items()]
-        # id of ites proj
-        proj = Project.objects.get(id = id)
-        if 'name' in list_of_search:
-            name = request.data['name']
-        if 'start_at' in list_of_search:
-            start = request.data['start_at']
-        if 'finished_at' in list_of_search:
-            end = request.data['finished_at']
-        step = Step.objects.create(
-            name=name,
-            start_at = start,
-            finished_at= end,
-            project = proj,
-        )
-        step.save()
-
-        return Response({'projectid':step.project.id})
-
+        serialie= UpdateSteptSerializers(data=request.data, partial=True)
+        lookup_field = 'email'
+        if serialie.is_valid():
+            serialie.save()
+        return  Response(serialie.errors)
 
 @csrf_exempt
 @api_view(['GET','PUT'])

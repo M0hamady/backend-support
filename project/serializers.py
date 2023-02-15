@@ -11,13 +11,16 @@ class SteptSerializers(serializers.ModelSerializer):
         model = Step
         fields = "__all__"
 class UpdateSteptSerializers(serializers.ModelSerializer):
+    # project = serializers.ReadOnlyField(source='project.uuid')
     class Meta:
         model = Step
         fields = ('name','cost','show_to_owner','start_at','finished_at','is_finished','project')
         extra_kwargs = {
-            'project': {'required': False},
+            'project': {'required': True,},
             'name': {'required': False}
         }
+        def ceate(self,validated_data):
+            return Step.objects.create(**validated_data)
 class ProjectSerializers(serializers.ModelSerializer):
     # steps = serializers.StringRelatedField(many=True)
     step = serializers.ListField(source='steps')

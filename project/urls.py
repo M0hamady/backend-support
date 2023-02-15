@@ -11,7 +11,7 @@ urlpatterns = [
     path('step/', step),
     path('step/<int:id>/', exac_step),
     path('astep/<int:id>/', aStep),
-    path('addstep/<int:id>/', add_step),
+    path('addstep/', add_step),
     path('moshtrayat/<int:id>/', moshtrayat),
     path('<int:id>/', exac_proj),
     path('project_users/<int:id>/', project_users),

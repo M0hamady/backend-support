@@ -99,7 +99,7 @@ class Step(models.Model):
     start_at = models.DateField(auto_now=False,null=True)
     finished_at = models.DateTimeField(auto_now=False,null=True)
     is_finished =models.BooleanField(default=False)
-    project =models.ForeignKey(Project,on_delete=models.CASCADE)
+    project =models.ForeignKey(Project,on_delete=models.CASCADE,related_query_name='Project.uuid')
     uuid = models.CharField(default=uuid.uuid4(),null=True,max_length=100)
 
     def __str__(self):
