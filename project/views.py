@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from meets.models import Meet as Meeting
 from project.models import Project, Step, Moshtarayet
 from project.serializers import ProjectSerializers, SteptSerializers, MoshtrayatSerializers, UpdateSteptSerializers, \
-    ProjectSerializersSimple, ProjectSerializersSimpleWithSteps
+    ProjectSerializersSimple, ProjectSerializersSimpleWithSteps, ProjectSerializersSimpleCreate
 from rest_framework.permissions import IsAuthenticated
 from  django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -47,40 +47,16 @@ def project(request):
             return Response(serialize.data)
         except: return ({'message':'ther is no data for project'})
     elif request.method == "POST":
-        list_of_search = [k for k, v in request.data.items()]
-        if ('name' in list_of_search):
-            name_ = request.data['name']
-        if ('address' in list_of_search):
-            address_ = request.data['address']
-        if ('owner' in list_of_search):
-            owner = Token.objects.get(key =str(request.data['owner']).split(' ')[0])
-            print(str(request.data['owner']).split(' '),545454)
-        project = Project.objects.create(
-            name=name_,
-            address=address_,
-            owner = User.objects.get(auth_token=owner),
-            creator = request.user,
-        )
-        project.save()
-        if 'number' in list_of_search:
-            number = request.data['number']
-            for i in range(int(number)):
-                # print(i)
-                step = Step.objects.create(
-                    name='un named yet',
-                        project = project
-                )
-                step.save()
-            print("done creation for step",id)
-        if 'id' in list_of_search:
-            id_meet = get_object_or_404(Meeting,id =request.data['id'])
-        # meeting = Meeting.objects.get(id=id)
-            if id_meet :
-                print("create relation")
-                id_meet.order.add(project)
-                id_meet.save()
-                print('saved')
-        return Response({'done':True})
+        _mutable = request.data._mutable
+        request.data._mutable = True
+        request.data['creator'] = request.user.id
+        request.data._mutable = _mutable
+        serializer = ProjectSerializersSimpleCreate(data=request.data, partial=True)
+        lookup_field = 'uuid'
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
 # @authentication_classes([TokenAuthentication])
 # @permission_classes([IsAuthenticated])
 # def projectUpdate(request,id):
@@ -168,6 +144,7 @@ def add_step(request):
         lookup_field = 'email'
         if serialie.is_valid():
             serialie.save()
+            return Response(serialie.data)
         return  Response(serialie.errors)
 
 @csrf_exempt
