@@ -152,7 +152,7 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
-CSRF_TRUSTED_ORIGINS = ['https://starfish-app-3c8ff.ondigitalocean.app','starfish-app-3c8ff.ondigitalocean.app','https://octopus-app-8uosp.ondigitalocean.app','octopus-app-8uosp.ondigitalocean.app','sea-turtle-app-xw9tc.ondigitalocean.app/',"sea-turtle-app-xw9tc.ondigitalocean.app"]
+CSRF_TRUSTED_ORIGINS = ['https://starfish-app-3c8ff.ondigitalocean.app','starfish-app-3c8ff.ondigitalocean.app','https://octopus-app-8uosp.ondigitalocean.app','octopus-app-8uosp.ondigitalocean.app','sea-turtle-app-xw9tc.ondigitalocean.app/',"sea-turtle-app-xw9tc.ondigitalocean.app","164.90.191.143:8000'"]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
 "http://localhost:3000",
@@ -166,6 +166,7 @@ CORS_ALLOWED_ORIGINS = [
 "https://octopus-app-8uosp.ondigitalocean.app",
 "http://127.0.0.1:3000",
 "http://172.20.10.7:3000",
+"http://164.90.191.143:8000'",
 ]
 CORS_ALLOW_CREDENTIALS = True
 
