@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-czkk9v8wfbukv=0$(6u=qx1rh(-h3cz=f5yr*0yuj9mc0811m^
 DEBUG = True
 
 # ALLOWED_HOSTS = ['192.168.1.18','127.0.0.1','localhost','172.20.10.7','192.168.1.104','192.168.0.119','192.168.1.101','starfish-app-3c8ff.ondigitalocean.app',"sea-turtle-app-xw9tc.ondigitalocean.app/",'sea-turtle-app-xw9tc.ondigitalocean.app/',"https://sea-turtle-app-xw9tc.ondigitalocean.app/"]
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost,sea-turtle-app-xw9tc.ondigitalocean.app").split(",")
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost,sea-turtle-app-xw9tc.ondigitalocean.app,164.90.191.143").split(",")
 
 # Application definition
 
@@ -152,7 +152,12 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
-CSRF_TRUSTED_ORIGINS = ['https://starfish-app-3c8ff.ondigitalocean.app','starfish-app-3c8ff.ondigitalocean.app','https://octopus-app-8uosp.ondigitalocean.app','octopus-app-8uosp.ondigitalocean.app','sea-turtle-app-xw9tc.ondigitalocean.app/',"sea-turtle-app-xw9tc.ondigitalocean.app","164.90.191.143:8000'"]
+CSRF_TRUSTED_ORIGINS = ['https://starfish-app-3c8ff.ondigitalocean.app',
+                        'starfish-app-3c8ff.ondigitalocean.app',
+                        'https://octopus-app-8uosp.ondigitalocean.app',
+                        'octopus-app-8uosp.ondigitalocean.app',
+                        'sea-turtle-app-xw9tc.ondigitalocean.app/',
+                        "sea-turtle-app-xw9tc.ondigitalocean.app","164.90.191.143:8000'"]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
 "http://localhost:3000",
@@ -166,7 +171,7 @@ CORS_ALLOWED_ORIGINS = [
 "https://octopus-app-8uosp.ondigitalocean.app",
 "http://127.0.0.1:3000",
 "http://172.20.10.7:3000",
-"http://164.90.191.143:8000'",
+"http://164.90.191.143:8000",
 ]
 CORS_ALLOW_CREDENTIALS = True
 
